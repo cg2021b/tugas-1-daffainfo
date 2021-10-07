@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <button onclick="myFunction()">Change Light</button>
+</body>
+</html>
+
+
+<script>    
+    let scene, camera, renderer, cube, cone, cylinder, torus, sphere, octahedron;
+    
+    // set up the environment - 
+    // initiallize scene, camera, objects and renderer
+    let createCube = () => {
+        let geometry = new THREE.BoxGeometry(1, 1, 1);
+        let material = new THREE.MeshBasicMaterial({ color: 0x00a1cb })
+        cube = new THREE.Mesh(geometry, material);
+        scene.add(cube);
+        cube.position.set(0, -2, 0);
+    }
+
+    let createCone = () => {
+        let geometry = new THREE.ConeGeometry(0.5, 1, 16)
+        let material = new THREE.MeshPhongMaterial({ color: 0xaa4400, shininess: 150 })
+        cone = new THREE.Mesh(geometry, material);
+        scene.add(cone);
+        cone.position.set(0, 2, 0);
+    }
+
+    let createCylinder = () => {
+        let geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 16)
+        let material = new THREE.MeshLambertMaterial({color: 0x448800, emissive:0x0})
+        cylinder = new THREE.Mesh(geometry, material);
+        scene.add(cylinder);
+        cylinder.position.set(-2, -2, 0);
+    }
+
+    let createTorus = () => {
+        let geometry = new THREE.TorusGeometry(0.5, 0.15, 8, 16)
+        let material = new THREE.MeshPhongMaterial({ color: 0x880044, shininess: 150 })
+        torus = new THREE.Mesh(geometry, material);
+        scene.add(torus);
+        torus.position.set(2, -2, 0);
+    }
+
+    let createSphere = () => {
+        let geometry = new THREE.SphereGeometry(0.5, 8, 8)
+        let material = new THREE.MeshPhongMaterial({ color: 0x990099, shininess: 150 })
+        sphere = new THREE.Mesh(geometry, material);
+        scene.add(sphere);
+        sphere.position.set(2, 2, 0);
+    }
+
+    let createOctahedron = () => {
+        let geometry = new THREE.OctahedronGeometry(0.5)
+        let material = new THREE.MeshPhongMaterial({ color: 0x0077ff, shininess: 150 })
+        octahedron = new THREE.Mesh(geometry, material);
+        scene.add(octahedron);
+        octahedron.position.set(-2, 2, 0);
+    }
+
+    var button = document.querySelector("button");
+    var changeLight = true;
+
+    button.addEventListener("click", function() {
+    if(changeLight) {
+        const intensity = 1;
+        const dlight = new THREE.DirectionalLight(0xFFFFFF, intensity);
+        dlight.position.set(0, 0, 2);
+        scene.add(dlight);
+    } else {
+        const plight = new THREE.PointLight( 0xff0000, 1, 100 );
+        plight.position.set(0, -2, 0);
+        scene.add(plight);
+        
+    }
+    
+    });
+    // 1. create the scene
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x151515);
+        
+    // 2. create an locate the camera       
+    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera.position.z = 5;
+    
+    // const intensity = 1;
+    // const dlight = new THREE.DirectionalLight(0xFFFFFF, intensity);
+    // dlight.position.set(0, 0, 2);
+    // scene.add(dlight);
+
+    const plight = new THREE.PointLight( 0xff0000, 5, 100 );
+    plight.position.set(0, -2, 0);
+    scene.add(plight);
+        
+    // 3. create an locate the object on the scene
+    createCube();
+    createCone();
+    createCylinder();
+    createTorus();
+    createSphere();
+    createOctahedron();
+
+    camera.position.z = 5;
+        
+    // 4. create the renderer     
+    renderer = new THREE.WebGLRenderer({antialias: true});   
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    
+    document.body.appendChild(renderer.domElement);
+    
+    // main animation loop - calls 50-60 in a second.
+    let mainLoop = function() {
+        renderer.render(scene, camera);
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        cone.rotation.x += 0.01;
+        cone.rotation.y += 0.01;
+        cylinder.rotation.x += 0.01;
+        cylinder.rotation.y += 0.01;
+        torus.rotation.x += 0.01;
+        torus.rotation.y += 0.01;
+        sphere.rotation.x += 0.01;
+        sphere.rotation.y += 0.01;
+        octahedron.rotation.x += 0.01;
+        octahedron.rotation.y += 0.01;
+        requestAnimationFrame(mainLoop);
+    };
+
+    mainLoop();
+    </script>
+    
