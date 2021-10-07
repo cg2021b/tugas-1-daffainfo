@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Mencoba Three JS</title>
+    <title>Document</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
@@ -91,6 +91,9 @@
     const plight = new THREE.PointLight( 0xff0000, 5, 100 );
     plight.position.set(0, -2, 0);
     scene.add(plight);
+
+    plight.visible = false;
+    dlight.visible = true;
         
     // 3. create an locate the object on the scene
     createCube();
