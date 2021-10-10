@@ -32,7 +32,7 @@
 <script>    
     let scene, camera, renderer;
     let cube, cone, cylinder, torus, sphere, octahedron, circle, dodecahedron, extrude, icosahedron, lathe, plane, polyhedron;
-    let ring, tetrahedron, torusknot, tube;
+    let ring, tetrahedron, torusknot, tube, textgeo;
     
     // set up the environment - 
     // initiallize scene, camera, objects and renderer
@@ -49,7 +49,7 @@
         let material = new THREE.MeshBasicMaterial({wireframe: true, color: 0x0652464 })
         circle = new THREE.Mesh(geometry, material);
         scene.add(circle);
-        circle.position.set(0, 0, 0);
+        circle.position.set(6, 2, 0);
     }
 
     let createCone = () => {
@@ -73,7 +73,7 @@
         let material = new THREE.MeshPhysicalMaterial({color: 0x23cb68})
         dodecahedron = new THREE.Mesh(geometry, material);
         scene.add(dodecahedron);
-        dodecahedron.position.set(-2, 0, 0);
+        dodecahedron.position.set(-6, -2, 0);
     }
 
     let createExtrude = () => {
@@ -94,7 +94,7 @@
         extrude = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xdeded, shininess: 150 }));
         scene.add(extrude);
 
-        extrude.position.set(2, 0, 0);
+        extrude.position.set(-3, 2, 0);
     }
 
     let createIcosahedron = () => {
@@ -102,7 +102,7 @@
         let material = new THREE.MeshPhysicalMaterial({color: 0xf0446f})
         icosahedron = new THREE.Mesh(geometry, material);
         scene.add(icosahedron);
-        icosahedron.position.set(-4, 0, 0);
+        icosahedron.position.set(-3, 0, 0);
     }
 
     let createLathe = () => {
@@ -114,7 +114,7 @@
         let material = new THREE.MeshPhysicalMaterial({color: 0xf0446f, wireframe: true})
         lathe = new THREE.Mesh(geometry, material);
         scene.add(lathe);
-        lathe.position.set(4, 0, 0);
+        lathe.position.set(4, -1, 0);
     }
 
     let createOctahedron = () => {
@@ -122,7 +122,7 @@
         let material = new THREE.MeshToonMaterial({ color: 0x0077ff })
         octahedron = new THREE.Mesh(geometry, material);
         scene.add(octahedron);
-        octahedron.position.set(-2, 2, 0);
+        octahedron.position.set(2.35, 0, 0);
     }
 
     let createPlane = () => {
@@ -152,7 +152,7 @@
         let material = new THREE.MeshLambertMaterial({ color: 0x1aa028 })
         polyhedron = new THREE.Mesh(geometry, material);
         scene.add(polyhedron);
-        polyhedron.position.set(4, -2, 0);
+        polyhedron.position.set(6, -2, 0);
     }
 
     let createRing = () => {
@@ -160,7 +160,7 @@
         let material = new THREE.MeshPhysicalMaterial({ color: 0xbf48b7, wireframe: true})
         ring = new THREE.Mesh(geometry, material);
         scene.add(ring);
-        ring.position.set(-4, 2, 0);
+        ring.position.set(-6, 2, 0);
     }
 
     let createTetrahedron = () => {
@@ -206,6 +206,23 @@
         tube = new THREE.Mesh( geometry, material );
         scene.add( tube );
         tube.position.set(6, 0, 0);
+    }
+
+    let createText = () => {
+        var loader = new THREE.FontLoader();
+        loader.load( 'https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function ( font ) {
+        var geometry = new THREE.TextGeometry( 'Daffa', {
+            font: font,
+            size: 0.8,
+            height: 0.5,
+            curveSegments: 4,
+        } );
+        geometry.center();
+        var material = new THREE.MeshNormalMaterial();
+        var textgeo = new THREE.Mesh( geometry, material );
+        scene.add( textgeo );
+        textgeo.position.set(0, 0, 0);
+        } );
     }
 
     let createSphere = () => {
@@ -270,6 +287,7 @@
     createTorusKnot();
     createTube();
     createSphere();
+    createText();
     createOctahedron();
 
     camera.position.z = 5;
