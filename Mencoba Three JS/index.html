@@ -11,22 +11,32 @@
         <option value="2">Point Light</option>
         <option value="3">Hemisphere Light</option>
         <option value="4">Spotlight</option>
-      </select>
+    </select>
 </body>
 </html>
 
 
 <script>    
-    let scene, camera, renderer, cube, cone, cylinder, torus, sphere, octahedron;
+    let scene, camera, renderer;
+    let cube, cone, cylinder, torus, sphere, octahedron, circle, dodecahedron, extrude, icosahedron, lathe, plane, polyhedron;
+    let ring, tetrahedron, torusknot;
     
     // set up the environment - 
     // initiallize scene, camera, objects and renderer
     let createCube = () => {
         let geometry = new THREE.BoxGeometry(1, 1, 1);
-        let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x00a1cb })
+        let material = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x0ca1cb })
         cube = new THREE.Mesh(geometry, material);
         scene.add(cube);
         cube.position.set(0, -2, 0);
+    }
+
+    let createCircle = () => {
+        let geometry = new THREE.CircleGeometry(0.8, 50);
+        let material = new THREE.MeshBasicMaterial({wireframe: true, color: 0x0652464 })
+        circle = new THREE.Mesh(geometry, material);
+        scene.add(circle);
+        circle.position.set(0, 0, 0);
     }
 
     let createCone = () => {
@@ -45,12 +55,123 @@
         cylinder.position.set(-2, -2, 0);
     }
 
+    let createDodecahedron = () => {
+        let geometry = new THREE.DodecahedronGeometry(0.8, 0)
+        let material = new THREE.MeshPhysicalMaterial({color: 0x23cb68})
+        dodecahedron = new THREE.Mesh(geometry, material);
+        scene.add(dodecahedron);
+        dodecahedron.position.set(-2, 0, 0);
+    }
+
+    let createExtrude = () => {
+        var frame = new THREE.Shape();
+        frame.moveTo(-0.5, -0.5);
+        frame.lineTo( 0.5, -0.5);
+        frame.lineTo( 0.5,  0.5);
+        frame.lineTo(-0.5,  0.5);
+    
+        var extrudeSettings = {
+            amount: 1,
+            steps: 1,
+            depth: 3,
+            bevelEnabled: false
+        };
+
+        var geometry = new THREE.ExtrudeGeometry(frame, extrudeSettings);
+        extrude = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xdeded }));
+        scene.add(extrude);
+
+        extrude.position.set(2, 0, 0);
+    }
+
+    let createIcosahedron = () => {
+        let geometry = new THREE.IcosahedronGeometry(0.8, 0)
+        let material = new THREE.MeshPhysicalMaterial({color: 0xf0446f})
+        icosahedron = new THREE.Mesh(geometry, material);
+        scene.add(icosahedron);
+        icosahedron.position.set(-4, 0, 0);
+    }
+
+    let createLathe = () => {
+        const points = [];
+        for ( let i = 1; i < 4; i ++ ) {
+            points.push( new THREE.Vector2( 0.4 + Math.sin( i * 0.005 ), i * 0.5) );
+        }
+        const geometry = new THREE.LatheGeometry( points );
+        let material = new THREE.MeshPhysicalMaterial({color: 0xf0446f})
+        lathe = new THREE.Mesh(geometry, material);
+        scene.add(lathe);
+        lathe.position.set(4, 0, 0);
+    }
+
+    let createOctahedron = () => {
+        let geometry = new THREE.OctahedronGeometry(0.5)
+        let material = new THREE.MeshToonMaterial({ color: 0x0077ff })
+        octahedron = new THREE.Mesh(geometry, material);
+        scene.add(octahedron);
+        octahedron.position.set(-2, 2, 0);
+    }
+
+    let createPlane = () => {
+        let geometry = new THREE.PlaneGeometry( 1, 1 )
+        let material = new THREE.MeshToonMaterial({ color: 0x1aa028 })
+        plane = new THREE.Mesh(geometry, material);
+        scene.add(plane);
+        plane.position.set(4, 2, 0);
+    }
+
+    let createPolyhedron = () => {
+        const verticesOfCube = [
+            -1,-1,-1,    1,-1,-1,    1, 1,-1,    -1, 1,-1,
+            -1,-1, 1,    1,-1, 1,    1, 1, 1,    -1, 1, 1,
+        ];
+
+        const indicesOfFaces = [
+            2,1,0,    0,3,2,
+            0,4,7,    7,3,0,
+            0,1,5,    5,4,0,
+            1,2,6,    6,5,1,
+            2,3,7,    7,6,2,
+            4,5,6,    6,7,4
+        ];
+
+        const geometry = new THREE.PolyhedronGeometry( verticesOfCube, indicesOfFaces, 0.8, 2 );
+        let material = new THREE.MeshLambertMaterial({ color: 0x1aa028 })
+        polyhedron = new THREE.Mesh(geometry, material);
+        scene.add(polyhedron);
+        polyhedron.position.set(4, -2, 0);
+    }
+
+    let createRing = () => {
+        let geometry = new THREE.RingGeometry( 0.5, 0.8, 32 );
+        let material = new THREE.MeshPhysicalMaterial({ color: 0xbf48b7 })
+        ring = new THREE.Mesh(geometry, material);
+        scene.add(ring);
+        ring.position.set(-4, 2, 0);
+    }
+
+    let createTetrahedron = () => {
+        let geometry = new THREE.TetrahedronGeometry( 0.5, 0);
+        let material = new THREE.MeshPhysicalMaterial({ color: 0x588ac1 })
+        tetrahedron = new THREE.Mesh(geometry, material);
+        scene.add(tetrahedron);
+        tetrahedron.position.set(-4, -2, 0);
+    }
+
     let createTorus = () => {
         let geometry = new THREE.TorusGeometry(0.5, 0.15, 8, 16)
-        let material = new THREE.MeshPhongMaterial({ color: 0x880044, shininess: 150 })
+        let material = new THREE.MeshStandardMaterial({ color: 0x880044 })
         torus = new THREE.Mesh(geometry, material);
         scene.add(torus);
         torus.position.set(2, -2, 0);
+    }
+
+    let createTorusKnot = () => {
+        let geometry = new THREE.TorusKnotGeometry(0.5, 0.15);
+        let material = new THREE.MeshPhongMaterial({ color: 0x880044 })
+        torusknot = new THREE.Mesh(geometry, material);
+        scene.add(torusknot);
+        torusknot.position.set(-6, 0, 0);
     }
 
     let createSphere = () => {
@@ -59,25 +180,6 @@
         sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
         sphere.position.set(2, 2, 0);
-    }
-
-    let createOctahedron = () => {
-        let geometry = new THREE.OctahedronGeometry(0.5)
-        let material = new THREE.MeshPhongMaterial({ color: 0x0077ff, shininess: 150 })
-        octahedron = new THREE.Mesh(geometry, material);
-        scene.add(octahedron);
-        octahedron.position.set(-2, 2, 0);
-    }
-
-    function LightFunc(Light){
-
-        plight.visible = true;
-        dlight.visible = false;
-        if (document.getElementById('Change_Light').checked) {
-            plight.visible = false;
-            dlight.visible = true;
-        }
-        renderer.render(scene,camera);
     }
 
     // 1. create the scene
@@ -119,9 +221,19 @@
         
     // 3. create an locate the object on the scene
     createCube();
+    createCircle();
     createCone();
     createCylinder();
+    createDodecahedron();
+    createExtrude();
+    createIcosahedron();
+    createLathe();
+    createPlane();
+    createPolyhedron();
+    createRing();
+    createTetrahedron();
     createTorus();
+    createTorusKnot();
     createSphere();
     createOctahedron();
 
@@ -138,12 +250,32 @@
         renderer.render(scene, camera);
         cube.rotation.x += 0.01;
         cube.rotation.y += 0.01;
+        circle.rotation.x += 0.01;
+        circle.rotation.y += 0.01;
+        dodecahedron.rotation.x += 0.01;
+        dodecahedron.rotation.y += 0.01;
+        extrude.rotation.x += 0.01;
+        extrude.rotation.y += 0.01;
+        icosahedron.rotation.x += 0.01;
+        icosahedron.rotation.y += 0.01;
+        lathe.rotation.x += 0.01;
+        lathe.rotation.y += 0.01;
+        plane.rotation.x += 0.01;
+        plane.rotation.y += 0.01;
+        ring.rotation.x += 0.01;
+        ring.rotation.y += 0.01;
+        tetrahedron.rotation.x += 0.01;
+        tetrahedron.rotation.y += 0.01;
+        polyhedron.rotation.x += 0.01;
+        polyhedron.rotation.y += 0.01;
         cone.rotation.x += 0.01;
         cone.rotation.y += 0.01;
         cylinder.rotation.x += 0.01;
         cylinder.rotation.y += 0.01;
         torus.rotation.x += 0.01;
         torus.rotation.y += 0.01;
+        torusknot.rotation.x += 0.01;
+        torusknot.rotation.y += 0.01;
         sphere.rotation.x += 0.01;
         sphere.rotation.y += 0.01;
         octahedron.rotation.x += 0.01;
