@@ -1,10 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Document</title>
+    <title>Tugas Three jS</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        h1 {
+            text-align: center;
+        }
+        select {
+            display: block;
+            margin: 0 auto;
+            width: 168px;
+            height: 34px;
+            border: 1px solid #000;
+        }
+    </style>
 </head>
 <body>
+    <h1>Muhammad Daffa - 05111940000175</h1>
     <select name="light" id="light">
         <option value="0">Directional Light</option>
         <option value="1">Ambient Light</option>
@@ -98,7 +111,7 @@
             points.push( new THREE.Vector2( 0.4 + Math.sin( i * 0.005 ), i * 0.5) );
         }
         const geometry = new THREE.LatheGeometry( points );
-        let material = new THREE.MeshPhysicalMaterial({color: 0xf0446f})
+        let material = new THREE.MeshPhysicalMaterial({color: 0xf0446f, wireframe: true})
         lathe = new THREE.Mesh(geometry, material);
         scene.add(lathe);
         lathe.position.set(4, 0, 0);
@@ -114,7 +127,7 @@
 
     let createPlane = () => {
         let geometry = new THREE.PlaneGeometry( 1, 1 )
-        let material = new THREE.MeshToonMaterial({ color: 0x1aa028 })
+        let material = new THREE.MeshToonMaterial({ color: 0x1aa028, wireframe: true })
         plane = new THREE.Mesh(geometry, material);
         scene.add(plane);
         plane.position.set(4, 2, 0);
@@ -144,7 +157,7 @@
 
     let createRing = () => {
         let geometry = new THREE.RingGeometry( 0.5, 0.8, 32 );
-        let material = new THREE.MeshPhysicalMaterial({ color: 0xbf48b7 })
+        let material = new THREE.MeshPhysicalMaterial({ color: 0xbf48b7, wireframe: true})
         ring = new THREE.Mesh(geometry, material);
         scene.add(ring);
         ring.position.set(-4, 2, 0);
