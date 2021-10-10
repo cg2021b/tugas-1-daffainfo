@@ -32,7 +32,7 @@
 <script>    
     let scene, camera, renderer;
     let cube, cone, cylinder, torus, sphere, octahedron, circle, dodecahedron, extrude, icosahedron, lathe, plane, polyhedron;
-    let ring, tetrahedron, torusknot;
+    let ring, tetrahedron, torusknot, tube;
     
     // set up the environment - 
     // initiallize scene, camera, objects and renderer
@@ -91,7 +91,7 @@
         };
 
         var geometry = new THREE.ExtrudeGeometry(frame, extrudeSettings);
-        extrude = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xdeded }));
+        extrude = new THREE.Mesh(geometry, new THREE.MeshPhongMaterial({ color: 0xdeded, shininess: 150 }));
         scene.add(extrude);
 
         extrude.position.set(2, 0, 0);
@@ -181,15 +181,36 @@
 
     let createTorusKnot = () => {
         let geometry = new THREE.TorusKnotGeometry(0.5, 0.15);
-        let material = new THREE.MeshPhongMaterial({ color: 0x880044 })
+        let material = new THREE.MeshPhongMaterial({ color: 0x880044, shininess: 150 })
         torusknot = new THREE.Mesh(geometry, material);
         scene.add(torusknot);
         torusknot.position.set(-6, 0, 0);
     }
 
+    let createTube = () => {
+        class CustomSinCurve extends THREE.Curve {
+            constructor( scale = 1 ) {
+                super();
+                this.scale = scale;
+            }
+            getPoint( t, optionalTarget = new THREE.Vector3() ) {
+                const tx = t * 3 - 1.5;
+                const ty = Math.sin( 2 * Math.PI * t );
+                const tz = 0;
+                return optionalTarget.set( tx, ty, tz ).multiplyScalar( this.scale );
+            }
+        }
+        let path = new CustomSinCurve(0.5);
+        let geometry = new THREE.TubeGeometry( path, 100, 0.1, 20, false );
+        let material = new THREE.MeshPhongMaterial( { color: 0x00ff00, shininess: 150 } );
+        tube = new THREE.Mesh( geometry, material );
+        scene.add( tube );
+        tube.position.set(6, 0, 0);
+    }
+
     let createSphere = () => {
         let geometry = new THREE.SphereGeometry(0.5, 8, 8)
-        let material = new THREE.MeshPhongMaterial({ color: 0x990099, wireframe: true, shininess: 150 })
+        let material = new THREE.MeshPhongMaterial({ color: 0x990099, shininess: 150 })
         sphere = new THREE.Mesh(geometry, material);
         scene.add(sphere);
         sphere.position.set(2, 2, 0);
@@ -247,6 +268,7 @@
     createTetrahedron();
     createTorus();
     createTorusKnot();
+    createTube();
     createSphere();
     createOctahedron();
 
@@ -277,6 +299,8 @@
         plane.rotation.y += 0.01;
         ring.rotation.x += 0.01;
         ring.rotation.y += 0.01;
+        tube.rotation.x += 0.01;
+        tube.rotation.y += 0.01;
         tetrahedron.rotation.x += 0.01;
         tetrahedron.rotation.y += 0.01;
         polyhedron.rotation.x += 0.01;
